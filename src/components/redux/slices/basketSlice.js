@@ -1,20 +1,56 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+export const fetchProductBasket = createAsyncThunk('basketSlice/fetchProductBasket', async () => {
+  const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
+  return data;
+});
+
+export const addProductBasket = createAsyncThunk(
+  'basketSlice/fetchProductBasket',
+  async (params) => {
+    const obj = params;
+    await axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
+    const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
+    return data;
+  },
+);
+
+export const delProductBasket = createAsyncThunk('basketSlice/delProductBasket', async (params) => {
+  const id = params;
+  const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
+  await axios.delete(`https://62b1bba0196a9e98703c1172.mockapi.io/card/${id}`);
+  return data;
+});
 
 const initialState = {
-  items: [],
-  count: 0,
-  price: 0,
+  basketItems: [],
+  basketStatus: 'loading',
 };
 
-export const basketSlice = createSlice({
-  name: 'basket',
+export const ProductSlice = createSlice({
+  name: 'product',
   initialState: initialState,
   reducers: {
     setItems: (state, action) => {
-      console.log(state);
+      state.items = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchProductBasket.fulfilled, (state, action) => {
+      state.basketItems = action.payload;
+      state.basketStatus = 'success';
+    });
+    builder.addCase(fetchProductBasket.pending, (state, action) => {
+      state.basketItems = [];
+      state.basketStatus = 'loading';
+    });
+    builder.addCase(fetchProductBasket.rejected, (state, action) => {
+      state.basketItems = [];
+      state.basketStatus = 'error';
+    });
   },
 });
 
-export const { setItems } = basketSlice.actions;
-export default basketSlice.reducer;
+export const { setItems } = ProductSlice.actions;
+export default ProductSlice.reducer;

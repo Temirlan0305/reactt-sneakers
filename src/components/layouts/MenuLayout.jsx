@@ -2,16 +2,17 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../Header'
 import Basket from '../Basket';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { delProductBasket } from '../redux/slices/basketSlice';
 
 
 const MenuLayout = () => {
-   const [cartItems, setCartItems] = React.useState([]);
+   const { basketItems } = useSelector((state) => state.basket);
+   const dispatch = useDispatch();
    const [isbasket, setIsbasket] = React.useState(false);
 
    const removeToCart = (id) => {
-      axios.delete(`https://62b1bba0196a9e98703c1172.mockapi.io/card/${id}`);
-      setCartItems((prev) => prev.filter(item => item.id !== id))
+      dispatch(delProductBasket(id))
    }
 
    const openBasket = () => {
@@ -23,7 +24,8 @@ const MenuLayout = () => {
    return (
       <div className="App">
          <div className="wrapper">
-            {isbasket && <Basket cartInfo={cartItems} closeClick={closeBasket} onRemoveCart={removeToCart} />}
+            {/* {isbasket && <Basket cartInfo={cartItems} closeClick={closeBasket} onRemoveCart={removeToCart} />} */}
+            {isbasket && <Basket closeClick={closeBasket} onRemoveCart={removeToCart} basketItems={basketItems} />}
             <Header openClick={openBasket} />
             <div className="section">
                <Outlet />

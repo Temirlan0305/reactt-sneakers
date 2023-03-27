@@ -5,26 +5,30 @@ import Skeleton from '../components/Cart/Skeleton'
 import Search from '../components/Search';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProduct } from '../components/redux/slices/productSlice';
+import { fetchProductBasket, addProductBasket } from '../components/redux/slices/basketSlice';
 
 
 const Home = () => {
    const dispatch = useDispatch();
-   const { items, status } = useSelector((state) => state.product)
-   const { searchValue } = useSelector((state) => state.filter)
+   const { basketItems } = useSelector((state) => state.basket);
+   const { items, status } = useSelector((state) => state.product);
+   const { searchValue } = useSelector((state) => state.filter);
    // const [items, setItems] = React.useState([])
    const [isFavotite, setIsFavotite] = React.useState([]);
 
-
    React.useEffect(() => {
-      dispatch(fetchProduct())
-      // axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card').then((res) => {
-      //    setCartItems(res.data);
-      // });
+      async function productFetch() {
+         await dispatch(fetchProductBasket());
+         await dispatch(fetchProduct());
+      }
+      productFetch();
    }, []);
 
    const addToCart = (obj) => {
-      axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
-      // setCartItems((prev) => [...prev, obj])
+      console.log(obj)
+      if (!basketItems.some(item => Number(item.price) === Number(obj.price))) {
+         dispatch(addProductBasket(obj))
+      }
    }
    const addFavourite = (obj) => {
       axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/favorite', obj);
@@ -43,11 +47,11 @@ const Home = () => {
             <div className="section-bottom__row">
                {status === 'loading' ? [...new Array(6)].map((_, index) => <Skeleton key={index} />) : items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((obj, index = 1) => (
                   <Card
-                     title={obj.title}
-                     price={obj.price}
-                     image={obj.imageURL}
+                     {...obj}
                      key={index++}
                      onFavourite={(obj) => addFavourite(obj)}
+                     // added={basketItems.some(item => Number(item.id) === Number(obj.id))}
+                     added={basketItems.some(item => item.price === obj.price)}
                      onPlus={(obj) => addToCart(obj)}
                   />
                ))}
