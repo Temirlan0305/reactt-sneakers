@@ -13,7 +13,7 @@ const Home = () => {
    const { basketItems } = useSelector((state) => state.basket);
    const { items, status } = useSelector((state) => state.product);
    const { searchValue } = useSelector((state) => state.filter);
-   // const [items, setItems] = React.useState([])
+   const { setIsAdded } = React.useContext(appContext)
    const [isFavotite, setIsFavotite] = React.useState([]);
 
    React.useEffect(() => {
@@ -57,7 +57,7 @@ const Home = () => {
                      key={index++}
                      onFavourite={(obj) => addFavourite(obj)}
                      // added={basketItems.some(item => Number(item.id) === Number(obj.id))}
-                     added={basketItems.some(item => Number(item.productId) === Number(obj.id))}
+                     added={setIsAdded(obj.id)}
                      onPlus={(obj) => addToCart(obj)}
                   />
                ))}

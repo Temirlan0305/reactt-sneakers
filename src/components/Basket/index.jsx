@@ -10,7 +10,7 @@ function Basket({ closeClick, onRemoveCart }) {
 
    const [isGetOrder, setIsGetOrder] = React.useState(false)
    const onClickOrder = () => {
-      setIsGetOrder(isGetOrder)
+      setIsGetOrder(true)
    }
 
    return (

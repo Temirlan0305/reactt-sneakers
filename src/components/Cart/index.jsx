@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 
 function Card({ id, title, price, imageURL, onFavourite, onPlus, added }) {
+      const { basketItems } = useSelector((state) => state.basket);
       const [isAdded, setIsAdded] = React.useState(added)
       const [isFavorite, setisFavorite] = React.useState(true);
 
@@ -13,7 +14,7 @@ function Card({ id, title, price, imageURL, onFavourite, onPlus, added }) {
                   imageURL
             }
             onPlus(productObj);
-            setIsAdded(true)
+            setIsAdded(basketItems.some(item => Number(item.productId) === Number(productObj.productId)))
       }
 
 

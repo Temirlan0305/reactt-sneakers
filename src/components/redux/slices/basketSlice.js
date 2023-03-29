@@ -6,23 +6,24 @@ export const fetchProductBasket = createAsyncThunk('basketSlice/fetchProductBask
   return data;
 });
 
-export const addProductBasket = createAsyncThunk('basketSlice/addProductBasket', async (params) => {
-  const obj = params;
-  await axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
-  const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
-  return data;
-});
+// export const addProductBasket = createAsyncThunk('basketSlice/addProductBasket', async (params) => {
+//   const obj = params;
+//   await axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
+//   const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
+//   return data;
+// });
 
-export const delProductBasket = createAsyncThunk('basketSlice/delProductBasket', async (params) => {
-  const id = params;
-  const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
-  await axios.delete(`https://62b1bba0196a9e98703c1172.mockapi.io/card/${id}`);
-  return data;
-});
+// export const delProductBasket = createAsyncThunk('basketSlice/delProductBasket', async (params) => {
+//   const id = params;
+//   const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
+//   await axios.delete(`https://62b1bba0196a9e98703c1172.mockapi.io/card/${id}`);
+//   return data;
+// });
 
 const initialState = {
   basketItems: [],
   basketStatus: 'loading',
+  isAdded: false,
 };
 
 export const ProductSlice = createSlice({
@@ -58,5 +59,5 @@ export const ProductSlice = createSlice({
   },
 });
 
-export const { setItems, addItems, delItems } = ProductSlice.actions;
+export const { setItems, addItems, delItems, setIsAdded } = ProductSlice.actions;
 export default ProductSlice.reducer;
