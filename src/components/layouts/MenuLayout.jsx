@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Header from '../Header'
+import Header from '../Header';
 import Basket from '../Basket';
-import { useDispatch, useSelector } from 'react-redux';
-import { delProductBasket, fetchProductBasket, delItems } from '../redux/slices/basketSlice';
+import { useDispatch } from 'react-redux';
+import { delItems } from '../redux/slices/basketSlice';
 
 
 const MenuLayout = () => {
@@ -16,9 +16,11 @@ const MenuLayout = () => {
 
    const openBasket = () => {
       setIsbasket(true);
+      document.body.style.overflow = 'hidden'
    }
    const closeBasket = () => {
       setIsbasket(false);
+      document.body.style.overflow = ''
    }
    return (
       <div className="App">
