@@ -8,7 +8,10 @@ import BasketOrder from './BasketOrder';
 function Basket({ closeClick, onRemoveCart }) {
    const { basketItems } = useSelector((state) => state.basket);
 
-   const [isGetOrder, setIsGetOrder] = React.useState(true)
+   const [isGetOrder, setIsGetOrder] = React.useState(false)
+   const onClickOrder = () => {
+      setIsGetOrder(isGetOrder)
+   }
 
    return (
       <div className="basket">
@@ -25,7 +28,7 @@ function Basket({ closeClick, onRemoveCart }) {
                      </svg>
                   </button>
                </div>
-               {basketItems.length !== 0 ? <BasketProduct onRemoveCart={onRemoveCart} closeClick={closeClick} /> :
+               {basketItems.length !== 0 ? <BasketProduct onRemoveCart={onRemoveCart} closeClick={closeClick} onClickOrder={onClickOrder} /> :
                   <BasketOrder closeClick={closeClick}
                      title={isGetOrder ? 'Заказ оформлен!' : 'Корзина пустая'}
                      text={isGetOrder ? 'Ваш заказ #18 скоро будет передан курьерской доставке' : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'}
