@@ -6,15 +6,12 @@ export const fetchProductBasket = createAsyncThunk('basketSlice/fetchProductBask
   return data;
 });
 
-export const addProductBasket = createAsyncThunk(
-  'basketSlice/fetchProductBasket',
-  async (params) => {
-    const obj = params;
-    await axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
-    const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
-    return data;
-  },
-);
+export const addProductBasket = createAsyncThunk('basketSlice/addProductBasket', async (params) => {
+  const obj = params;
+  await axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
+  const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/card');
+  return data;
+});
 
 export const delProductBasket = createAsyncThunk('basketSlice/delProductBasket', async (params) => {
   const id = params;
@@ -35,6 +32,15 @@ export const ProductSlice = createSlice({
     setItems: (state, action) => {
       state.items = action.payload;
     },
+    addItems: (state, action) => {
+      const obj = action.payload;
+      axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
+    },
+    delItems: (state, action) => {
+      const id = action.payload;
+      axios.delete(`https://62b1bba0196a9e98703c1172.mockapi.io/card/${id}`);
+      state.basketItems = state.basketItems.filter((item) => item.id !== id);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProductBasket.fulfilled, (state, action) => {
@@ -52,5 +58,5 @@ export const ProductSlice = createSlice({
   },
 });
 
-export const { setItems } = ProductSlice.actions;
+export const { setItems, addItems, delItems } = ProductSlice.actions;
 export default ProductSlice.reducer;

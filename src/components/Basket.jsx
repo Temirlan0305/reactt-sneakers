@@ -1,4 +1,12 @@
-function Basket({ closeClick, onRemoveCart, basketItems }) {
+
+import React from 'react';
+import { useSelector } from 'react-redux';
+
+
+function Basket({ closeClick, onRemoveCart }) {
+   const { basketItems } = useSelector((state) => state.basket);
+
+
    return (
       <div className="basket">
          <div className="basket__wrapper">

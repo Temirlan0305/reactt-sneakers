@@ -6,7 +6,13 @@ function Card({ id, title, price, imageURL, onFavourite, onPlus, added }) {
       const [isFavorite, setisFavorite] = React.useState(true);
 
       const onClickPlus = () => {
-            onPlus({ id, title, price, imageURL });
+            const productObj = {
+                  productId: id,
+                  title,
+                  price,
+                  imageURL
+            }
+            onPlus(productObj);
             setIsAdded(true)
       }
 
@@ -46,7 +52,7 @@ function Card({ id, title, price, imageURL, onFavourite, onPlus, added }) {
                                     <p>{price} руб.</p>
                               </div>
                               <div className="section-bottom__plus">
-                                    <button onClick={onClickPlus}>
+                                    <button onClick={() => onClickPlus()}>
                                           <img src={isAdded ? '/img/checked-icon.svg' : '/img/plus-icon.svg'} alt="plus-icon" />
                                     </button>
                               </div>
