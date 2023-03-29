@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const BasketProduct = () => {
+const BasketProduct = ({ onRemoveCart }) => {
    const { basketItems } = useSelector(state => state.basket)
 
    return (

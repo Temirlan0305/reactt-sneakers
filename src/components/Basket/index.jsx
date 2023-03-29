@@ -1,12 +1,14 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import BasketNone from './BasketTwo';
+import BasketProduct from './BasketProduct';
+import BasketOrder from './BasketOrder';
 
 
 function Basket({ closeClick, onRemoveCart }) {
    const { basketItems } = useSelector((state) => state.basket);
 
+   const [isGetOrder, setIsGetOrder] = React.useState(true)
 
    return (
       <div className="basket">
@@ -23,6 +25,13 @@ function Basket({ closeClick, onRemoveCart }) {
                      </svg>
                   </button>
                </div>
+               {basketItems.length !== 0 ? <BasketProduct onRemoveCart={onRemoveCart} closeClick={closeClick} /> :
+                  <BasketOrder closeClick={closeClick}
+                     title={isGetOrder ? 'Заказ оформлен!' : 'Корзина пустая'}
+                     text={isGetOrder ? 'Ваш заказ #18 скоро будет передан курьерской доставке' : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'}
+                     image={isGetOrder ? '/img/basket-succes.png' : '/img/basket.png'}
+                     isActive={isGetOrder ? 'active' : ''}
+                  />}
             </div>
          </div>
       </div>

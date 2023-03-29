@@ -5,7 +5,7 @@ import Skeleton from '../components/Cart/Skeleton'
 import Search from '../components/Search';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProduct } from '../components/redux/slices/productSlice';
-import { fetchProductBasket, addProductBasket, addItems } from '../components/redux/slices/basketSlice';
+import { fetchProductBasket, delItems, addItems } from '../components/redux/slices/basketSlice';
 
 
 const Home = () => {
@@ -25,8 +25,15 @@ const Home = () => {
    }, []);
 
    const addToCart = (obj) => {
-      if (!basketItems.some(item => Number(item.productId) === Number(obj.id))) {
+      if (!basketItems.some((item) => Number(item.productId) === Number(obj.productId))) {
          dispatch(addItems(obj))
+      } else {
+         const item = basketItems.filter((item) => {
+            if (Number(item.productId) === Number(obj.productId)) {
+               return item
+            }
+         });
+         dispatch(delItems(Number(item[0].id)))
       }
    }
    const addFavourite = (obj) => {
