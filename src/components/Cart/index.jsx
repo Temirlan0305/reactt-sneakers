@@ -1,10 +1,11 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
+import { AppContext } from '../../App';
 
 function Card({ id, title, price, imageURL, onFavourite, onPlus, added }) {
       const { basketItems } = useSelector((state) => state.basket);
-      const [isAdded, setIsAdded] = React.useState(added)
       const [isFavorite, setisFavorite] = React.useState(true);
+      const { getIsAdded } = React.useContext(AppContext)
 
       const onClickPlus = () => {
             const productObj = {
@@ -14,7 +15,6 @@ function Card({ id, title, price, imageURL, onFavourite, onPlus, added }) {
                   imageURL
             }
             onPlus(productObj);
-            setIsAdded(basketItems.some(item => Number(item.productId) === Number(productObj.productId)))
       }
 
 
@@ -54,7 +54,7 @@ function Card({ id, title, price, imageURL, onFavourite, onPlus, added }) {
                               </div>
                               <div className="section-bottom__plus">
                                     <button onClick={() => onClickPlus()}>
-                                          <img src={isAdded ? '/img/checked-icon.svg' : '/img/plus-icon.svg'} alt="plus-icon" />
+                                          <img src={getIsAdded(id) ? '/img/checked-icon.svg' : '/img/plus-icon.svg'} alt="plus-icon" />
                                     </button>
                               </div>
                         </div>

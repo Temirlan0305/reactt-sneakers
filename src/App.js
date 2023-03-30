@@ -4,23 +4,26 @@ import Home from './pages/Home';
 import NotFoundError from './pages/NotFound';
 import MenuLayout from './components/layouts/MenuLayout';
 import { useSelector } from 'react-redux';
-import appContext from ''
 
+export const AppContext = React.createContext({});
 function App() {
-  const { basketItems } = (state) => state.basket;
-  const appContext = React.createContext();
-  const setIsAdded = (id) => {
-    basketItems.some((item) => Number(item.productId) === Number(id));
+  // const [isAdded, setIsAdded] = React.useState(false);
+  const { basketItems } = useSelector((state) => state.basket);
+  const getIsAdded = (id) => {
+    if (basketItems.length > 0) {
+      // setIsAdded();
+      return basketItems.some((item) => Number(item.productId) === Number(id))
+    }
   };
   return (
-    <appContext.Provider value={setIsAdded}>
+    <AppContext.Provider value={{ getIsAdded }}>
       <Routes>
         <Route path="/" element={<MenuLayout />}>
           <Route path="" element={<Home />} />
           <Route path="*" element={<NotFoundError />} />
         </Route>
       </Routes>
-    </appContext.Provider>
+    </AppContext.Provider>
   );
 }
 
