@@ -34,7 +34,6 @@ const Home = () => {
                return item
             }
          });
-
          dispatch(delItems(Number(item[0].id)))
       }
    }
