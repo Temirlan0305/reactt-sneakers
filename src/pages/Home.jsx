@@ -25,17 +25,19 @@ const Home = () => {
       productFetch();
    }, []);
 
-   const addToCart = (obj) => {
+   const addToCart = async (obj) => {
       if (!basketItems.some((item) => Number(item.productId) === Number(obj.productId))) {
-         dispatch(addItems(obj))
+         await dispatch(addItems(obj))
       } else {
          const item = basketItems.filter((item) => {
             if (Number(item.productId) === Number(obj.productId)) {
                return item
             }
          });
-         dispatch(delItems(Number(item[0].id)))
+         await dispatch(delItems(Number(item[0].id)))
+
       }
+      getIsAdded(obj.productId)
    }
    const addFavourite = (obj) => {
       axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/favorite', obj);
