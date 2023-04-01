@@ -4,16 +4,17 @@ import Card from '../components/Cart';
 import Skeleton from '../components/Cart/Skeleton'
 import Search from '../components/Search';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProduct } from '../components/redux/slices/productSlice';
-import { fetchProductBasket, delItems, addItems } from '../components/redux/slices/basketSlice'
+import { fetchProduct, selectProduct } from '../components/redux/slices/productSlice';
+import { fetchProductBasket, delItems, addItems, selectBasket } from '../components/redux/slices/basketSlice'
 import { AppContext } from '../App'
+import { selectFilter } from '../components/redux/slices/filterSlice';
 
 
 const Home = () => {
    const dispatch = useDispatch();
-   const { basketItems } = useSelector((state) => state.basket);
-   const { items, status } = useSelector((state) => state.product);
-   const { searchValue } = useSelector((state) => state.filter);
+   const { basketItems } = useSelector(selectBasket);
+   const { items, status } = useSelector(selectProduct);
+   const { searchValue } = useSelector(selectFilter);
    const { getIsAdded } = React.useContext(AppContext)
    const [isFavotite, setIsFavotite] = React.useState([]);
 
@@ -25,19 +26,17 @@ const Home = () => {
       productFetch();
    }, []);
 
-   const addToCart = async (obj) => {
+   const addToCart = (obj) => {
       if (!basketItems.some((item) => Number(item.productId) === Number(obj.productId))) {
-         await dispatch(addItems(obj))
+         dispatch(addItems(obj))
       } else {
          const item = basketItems.filter((item) => {
             if (Number(item.productId) === Number(obj.productId)) {
                return item
             }
          });
-         await dispatch(delItems(Number(item[0].id)))
-
+         dispatch(delItems(Number(item[0].id)))
       }
-      getIsAdded(obj.productId)
    }
    const addFavourite = (obj) => {
       axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/favorite', obj);
