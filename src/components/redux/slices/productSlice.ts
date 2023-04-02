@@ -3,22 +3,25 @@ import axios from 'axios';
 import { RootState } from '../store';
 import { Status } from './basketSlice';
 
-export const fetchProduct = createAsyncThunk('productSlice/fetchProduct', async () => {
-  const { data } = await axios.get('https://62b1bba0196a9e98703c1172.mockapi.io/itemsSneakers');
-  return data;
-});
 
-type itemsType ={
+export type itemsType ={
   id: string;
   title: string;
   price: number;
   imageURL: string;
+  text: string;
 }
 
 interface productState {
   items: itemsType[];
   status: Status.FULFILLED | Status.LOADING | Status.REJECTED;
 }
+
+export const fetchProduct = createAsyncThunk<itemsType[]>('productSlice/fetchProduct', async () => {
+  const { data } = await axios.get<itemsType[]>('https://62b1bba0196a9e98703c1172.mockapi.io/itemsSneakers');
+  return data;
+});
+
 
 const initialState: productState = {
   items: [],

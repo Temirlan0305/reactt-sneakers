@@ -21,7 +21,8 @@ export enum Status {
 
 interface ProductState {
   basketItems: productType[];
-  basketStatus: Status.LOADING | Status.FULFILLED | Status.REJECTED
+  basketStatus: Status.LOADING | Status.FULFILLED | Status.REJECTED;
+  totalPrice: number;  
 }
 export const fetchProductBasket = createAsyncThunk<productType[]>('basketSlice/fetchProductBasket', async () => {
   const { data } = await axios.get<productType[]>('https://62b1bba0196a9e98703c1172.mockapi.io/card');
@@ -31,6 +32,7 @@ export const fetchProductBasket = createAsyncThunk<productType[]>('basketSlice/f
 const initialState: ProductState = {
   basketItems: [],
   basketStatus: Status.LOADING,
+  totalPrice: 0,
 };
 
 export const ProductSlice = createSlice({
@@ -43,6 +45,7 @@ export const ProductSlice = createSlice({
     addItems: (state, action) => {
       const obj = action.payload;
       axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
+      state.basketItems.push(obj)
     },
     delItems: (state, action) => {
       const id = action.payload;
@@ -53,6 +56,7 @@ export const ProductSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchProductBasket.fulfilled, (state, action: PayloadAction<productType[]>) => {
       state.basketItems = action.payload;
+      state.totalPrice = state.basketItems.reduce((sum, obj) => {return sum + obj.price}, 0);
       state.basketStatus = Status.FULFILLED;
     });
     builder.addCase(fetchProductBasket.pending, (state, action) => {
@@ -63,7 +67,7 @@ export const ProductSlice = createSlice({
       state.basketItems = [];
       state.basketStatus = Status.REJECTED;
     });
-  },
+  }
 });
 
 export const { setItems, addItems, delItems } = ProductSlice.actions;

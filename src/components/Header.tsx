@@ -2,11 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setIsOpen } from './redux/slices/basketOrderSlice'
+import { fetchProductBasket } from './redux/slices/basketSlice';
+import { AppDispatch } from './redux/store';
 
 const Header: React.FC = () => {
-   const dispatch = useDispatch();
+   const dispatch = useDispatch<AppDispatch>();
 
    const openBasket = () => {
+      dispatch(fetchProductBasket())
       dispatch(setIsOpen(true))
       document.body.style.overflow = 'hidden'
    }

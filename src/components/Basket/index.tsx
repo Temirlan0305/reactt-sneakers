@@ -5,12 +5,13 @@ import BasketProduct from './BasketProduct';
 import BasketOrder from './BasketOrder';
 import {selectBasketOrder, setIsOpen, setIsOrder} from '../redux/slices/basketOrderSlice'
 import { selectBasket } from '../redux/slices/basketSlice';
+import { AppDispatch } from '../redux/store';
 
 
 function Basket( ) {
    const { basketItems } = useSelector(selectBasket);
    const { isOrder }= useSelector(selectBasketOrder)
-   const dispatch = useDispatch();
+   const dispatch = useDispatch<AppDispatch>();
    const onClickOrder = () => {
       dispatch(setIsOrder(true))
    }

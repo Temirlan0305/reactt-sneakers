@@ -5,18 +5,17 @@ import Skeleton from '../components/Cart/Skeleton'
 import Search from '../components/Search';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProduct, selectProduct } from '../components/redux/slices/productSlice';
-import { fetchProductBasket, delItems, addItems, selectBasket } from '../components/redux/slices/basketSlice'
-import { AppContext } from '../App'
+import { fetchProductBasket, selectBasket, setItems } from '../components/redux/slices/basketSlice'
+// import { AppContext } from '../App'
 import { selectFilter } from '../components/redux/slices/filterSlice';
+import { AppDispatch } from '../components/redux/store';
 
 
 const Home = () => {
-   const dispatch = useDispatch();
-   const { basketItems } = useSelector(selectBasket);
+   const dispatch = useDispatch<AppDispatch>();
    const { items, status } = useSelector(selectProduct);
    const { searchValue } = useSelector(selectFilter);
-   const { getIsAdded } = React.useContext(AppContext)
-   const [isFavotite, setIsFavotite] = React.useState([]);
+   // const { getIsAdded } = React.useContext(AppContext)
 
    React.useEffect(() => {
       async function productFetch() {
@@ -26,22 +25,6 @@ const Home = () => {
       productFetch();
    }, []);
 
-   const addToCart = (obj) => {
-      if (!basketItems.some((item) => Number(item.productId) === Number(obj.productId))) {
-         dispatch(addItems(obj))
-      } else {
-         const item = basketItems.filter((item) => {
-            if (Number(item.productId) === Number(obj.productId)) {
-               return item
-            }
-         });
-         dispatch(delItems(Number(item[0].id)))
-      }
-   }
-   const addFavourite = (obj) => {
-      axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/favorite', obj);
-      setIsFavotite((prev) => [...prev, obj])
-   }
 
 
    return (
@@ -57,11 +40,11 @@ const Home = () => {
                {status === 'loading' ? [...new Array(6)].map((_, index) => <Skeleton key={index} />) : items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((obj, index = 1) => (
                   <Card
                      {...obj}
-                     key={obj.id}
-                     onFavourite={(obj) => addFavourite(obj)}
-                     // added={basketItems.some(item => Number(item.productId) === Number(obj.id))}
-                     added={obj && getIsAdded(obj.id)}
-                     onPlus={(obj) => addToCart(obj)}
+                     key={index++}
+                  // onFavourite={(obj) => addFavourite(obj)}
+                  // added={basketItems.some(item => Number(item.productId) === Number(obj.id))}
+                  // added={obj && getIsAdded(obj.id)}
+                  // onPlus={(obj) => addToCart(obj)}
                   />
                ))}
             </div>

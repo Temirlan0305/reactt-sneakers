@@ -1,14 +1,16 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectBasket, delItems } from '../redux/slices/basketSlice';
+import { AppDispatch } from '../redux/store';
 
 
 const BasketProduct = () => {
-   const dispatch = useDispatch()
+   const dispatch = useDispatch<AppDispatch>()
    type basketType = {
       basketItems: any[];
    }
-   const {basketItems}: basketType = useSelector(selectBasket)
+   const {basketItems }: basketType = useSelector(selectBasket)
+   const { totalPrice } = useSelector(selectBasket)
    const onRemoveCart = (id: number) => {
       dispatch(delItems(id))
    }
@@ -38,11 +40,11 @@ const BasketProduct = () => {
             <div className="basket-prices-wrapper">
                <div className="basket-item">
                   <div className="basket-item__title">Итого: </div>
-                  <div className="basket-item__price">21 498 руб. </div>
+                  <div className="basket-item__price">{totalPrice} руб. </div>
                </div>
                <div className="basket-item">
                   <div className="basket-item__title">Налог 5%: </div>
-                  <div className="basket-item__price">1074 руб. </div>
+                  <div className="basket-item__price">{totalPrice - (totalPrice * 5 /100)} руб. </div>
                </div>
             </div>
             <div className="basket-prices__button">
