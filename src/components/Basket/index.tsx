@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import BasketProduct from './BasketProduct';
 import BasketOrder from './BasketOrder';
-import {selectBasketOrder, setIsOpen, setIsOrder} from '../redux/slices/basketOrderSlice'
+import {selectBasketOrder, setIsOpen} from '../redux/slices/basketOrderSlice'
 import { selectBasket } from '../redux/slices/basketSlice';
 import { AppDispatch } from '../redux/store';
 
@@ -12,9 +12,6 @@ function Basket( ) {
    const { basketItems } = useSelector(selectBasket);
    const { isOrder }= useSelector(selectBasketOrder)
    const dispatch = useDispatch<AppDispatch>();
-   const onClickOrder = () => {
-      dispatch(setIsOrder(true))
-   }
    const closeClick = () => {
       dispatch(setIsOpen(false))
       document.body.style.overflow = ''

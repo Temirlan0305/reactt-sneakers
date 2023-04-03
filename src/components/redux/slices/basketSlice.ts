@@ -44,13 +44,18 @@ export const ProductSlice = createSlice({
     },
     addItems: (state, action) => {
       const obj = action.payload;
-      axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
-      state.basketItems.push(obj)
+      async function fetchAdd () {
+        state.basketItems.push(obj)
+        state.totalPrice += obj.price;
+        await axios.post('https://62b1bba0196a9e98703c1172.mockapi.io/card', obj);
+      }
+      fetchAdd()
     },
     delItems: (state, action) => {
       const id = action.payload;
-      axios.delete(`https://62b1bba0196a9e98703c1172.mockapi.io/card/${id}`);
       state.basketItems = state.basketItems.filter((item) => item.id !== id);
+      state.totalPrice = state.basketItems.reduce((sum, obj) => {return sum + obj.price}, 0);
+      axios.delete(`https://62b1bba0196a9e98703c1172.mockapi.io/card/${id}`);
     },
   },
   extraReducers: (builder) => {

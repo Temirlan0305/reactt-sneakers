@@ -9,6 +9,7 @@ type typeProps = {
    isActive: string;
 }
 
+
 const BasketOrder: React.FC<typeProps> = ({ closeClick, text, title, image, isActive }) => {
    return (
       <div className="basket__row">

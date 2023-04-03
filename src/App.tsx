@@ -1,11 +1,19 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
+import Favourites from './pages/Favourites';
 import NotFoundError from './pages/NotFound';
 import MenuLayout from './components/layouts/MenuLayout';
+import { fetchProductBasket } from './components/redux/slices/basketSlice'
+import { fetchProductFavourite } from './components/redux/slices/favouriteSlice';
+import { fetchProduct } from './components/redux/slices/productSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from './components/redux/store';
+
 
 export const AppContext = React.createContext({});
 const App: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   // const [isAdded, setIsAdded] = React.useState(false);
   // const { basketItems } = useSelector(selectBasket);
   // const getIsAdded = (id: number) => {
@@ -14,11 +22,20 @@ const App: React.FC = () => {
   //     return basketItems.some((item: any) => Number(item.productId) === Number(id))
   //   }
   // };
+  React.useEffect(() => {
+    async function productFetch() {
+       await dispatch(fetchProductBasket());
+       await dispatch(fetchProductFavourite());
+       await dispatch(fetchProduct());
+    }
+    productFetch();
+ }, []);
   return (
     // <AppContext.Provider value={{ getIsAdded }}>
       <Routes>
         <Route path="/" element={<MenuLayout />}>
           <Route path="" element={<Home />} />
+          <Route path="favourites" element={<Favourites />} />
           <Route path="*" element={<NotFoundError />} />
         </Route>
       </Routes>
@@ -27,16 +44,3 @@ const App: React.FC = () => {
 }
 
 export default App;
-
-// const [count, setCount] = React.useState(0) // React.useState(0) = [0, f()]
-// const countPlus = () => {
-//   setCount(count + 1)
-// }
-// const countMinus = () => {
-//   setCount(count - 1)
-// }
-//   <center>
-//     <h1>{count}</h1>
-//     <button onClick={countPlus} id='plus'>+</button>
-//     <button onClick={() => countMinus()} id='minus'>-</button>
-//   </center>

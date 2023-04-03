@@ -4,6 +4,7 @@ import { RootState } from '../store';
 const initialState = {
   isOpen: false,
   isOrder: false,
+  orderItems: [],
 };
 
 export const basketOrderSlice = createSlice({
@@ -16,6 +17,9 @@ export const basketOrderSlice = createSlice({
     setIsOrder: (state, action) => {
       state.isOrder = action.payload;
     },
+    setAddorder: (state, action) => {
+      state.orderItems = action.payload
+    }
   },
 });
 
