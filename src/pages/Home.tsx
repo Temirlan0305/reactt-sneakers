@@ -3,15 +3,18 @@ import Card from '../components/Cart';
 import Skeleton from '../components/Cart/Skeleton'
 import Search from '../components/Search';
 import { useSelector } from 'react-redux';
-import { selectProduct } from '../components/redux/slices/productSlice';
+// import { selectProduct } from '../components/redux/slices/productSlice';
 import { selectFilter } from '../components/redux/slices/filterSlice';
+import { productApi } from '../components/api/ProductApi';
 
 
 const Home: React.FC = () => {
-   const { items, status } = useSelector(selectProduct);
+   // const { items, status } = useSelector(selectProduct);
    const { searchValue } = useSelector(selectFilter);
    // const { getIsAdded } = React.useContext(AppContext)
-   
+   const {data, isLoading, error} = productApi.useFetchAllProductQuery('');
+
+
    return (
       <>
          <div className="section-top">
@@ -22,7 +25,7 @@ const Home: React.FC = () => {
          </div>
          <div className="section-bottom">
             <div className="section-bottom__row">
-               {status === 'loading' ? [...new Array(6)].map((_, index) => <Skeleton key={index} />) : items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((obj, index = 1) => (
+               {isLoading === true ? [...new Array(6)].map((_, index) => <Skeleton key={index} />) : data.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((obj, index = 1) => (
                   <Card
                      {...obj}
                      key={index++}

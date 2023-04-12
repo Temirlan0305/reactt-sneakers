@@ -4,6 +4,7 @@ import basketSlice from './slices/basketSlice';
 import productSlice from './slices/productSlice';
 import basketOrderSlice from './slices/basketOrderSlice';
 import favouriteSlice from './slices/favouriteSlice';
+import {productApi} from '../api/ProductApi'
 
 export const store = configureStore({
   reducer: {
@@ -11,8 +12,10 @@ export const store = configureStore({
     basket: basketSlice,
     product: productSlice,
     basketOrder: basketOrderSlice,
-    favourite: favouriteSlice
+    favourite: favouriteSlice,
+    [productApi.reducerPath]: productApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(productApi.middleware),
 });
 
 
